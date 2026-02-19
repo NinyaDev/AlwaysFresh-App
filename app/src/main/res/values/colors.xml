@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- AlwaysFresh Theme Colors -->
+    <color name="fresh_green">#FF4CAF50</color>
+    <color name="primary_dark_green">#FF388E3C</color>
+    <color name="light_green">#FFC8E6C9</color>
+    <color name="warning_orange">#FFFF9800</color>
+    <color name="expired_red">#FFF44336</color>
+    <color name="background_light">#FFF5F5F5</color>
+    <color name="card_background">#FFFFFFFF</color>
+    <color name="text_primary">#FF212121</color>
+    <color name="text_secondary">#FF757575</color>
+</resources>

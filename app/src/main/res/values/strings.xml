@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">AlwaysFresh</string>
+    <string name="appTitle">AlwaysFresh</string>
+    <string name="appSubtitleMain">Smart Digital Fridge</string>
+    <string name="appSubtitleAdd">Add New Item</string>
+    <string name="freshLabel">Fresh</string>
+    <string name="expiringSoonLabel">Expiring Soon</string>
+    <string name="expiredLabel">Expired</string>
+    <string name="addNewItem">Add New Item</string>
+    <string name="addNewFoodItem">Add New Food Item</string>
+    <string name="itemNameHint">Item Name</string>
+    <string name="expirationDateLabel">Expiration Date</string>
+    <string name="saveItem">Save Item</string>
+    <string name="errorEmptyName">Please enter an item name</string>
+</resources>

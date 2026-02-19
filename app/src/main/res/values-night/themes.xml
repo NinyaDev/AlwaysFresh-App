@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.AlwaysFresh" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/fresh_green</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/primary_dark_green</item>
+        <item name="colorSecondary">@color/warning_orange</item>
+        <item name="android:statusBarColor">@color/primary_dark_green</item>
+    </style>
+</resources>
