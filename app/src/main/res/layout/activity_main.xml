@@ -24,9 +24,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/appTitle"
+            android:textColor="@color/white"
             android:textSize="28sp"
-            android:textStyle="bold"
-            android:textColor="@color/white" />
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -61,9 +61,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
+                android:textColor="@color/fresh_green"
                 android:textSize="28sp"
                 android:textStyle="bold"
-                android:textColor="@color/fresh_green"
                 tools:text="0" />
 
             <TextView

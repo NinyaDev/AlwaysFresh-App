@@ -55,6 +55,7 @@ class InventoryRepository {
             set(Calendar.MILLISECOND, 0)
         }
         //Calculation done in Miliseconds
+        // Computers use time in Miliseconds from 1970 is Unix Time
         val diffDays = (expiration.timeInMillis - today.timeInMillis) / (1000 * 60 * 60 * 24)
 
         return when {
