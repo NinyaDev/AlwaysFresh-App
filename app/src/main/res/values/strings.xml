@@ -12,4 +12,5 @@
     <string name="expirationDateLabel">Expiration Date</string>
     <string name="saveItem">Save Item</string>
     <string name="errorEmptyName">Please enter an item name</string>
+    <string name="defaultCount">0</string>
 </resources>

@@ -1,172 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     android:padding="16dp"
     android:background="@color/background_light"
     tools:context=".MainActivity">
 
-    <!-- Left Panel: Header + Summary + Button -->
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
+    <!-- Vertical Guideline at 50% — divides left and right panels -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingEnd="8dp">
-        <!-- App Header -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:background="@color/fresh_green"
-            android:padding="16dp"
-            android:layout_marginBottom="12dp">
+        app:layout_constraintGuide_percent="0.5" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/appTitle"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="@color/white" />
+    <!-- ════════════════════════════════════════════
+         LEFT PANEL: Header + Summary + Button
+         ════════════════════════════════════════════ -->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/appSubtitleMain"
-                android:textSize="12sp"
-                android:textColor="@color/white"
-                android:layout_marginTop="2dp" />
-
-        </LinearLayout>
-
-        <!-- Summary Card: label left, number right -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/card_background"
-            android:padding="12dp"
-            android:layout_marginBottom="12dp"
-            android:elevation="2dp">
-
-            <!-- Fresh row -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="6dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/freshLabel"
-                    android:textSize="16sp"
-                    android:textColor="@color/fresh_green" />
-
-                <TextView
-                    android:id="@+id/tvFresh"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/fresh_green"
-                    tools:text="0" />
-
-            </LinearLayout>
-
-            <!-- Expiring Soon row -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="6dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/expiringSoonLabel"
-                    android:textSize="16sp"
-                    android:textColor="@color/warning_orange" />
-
-                <TextView
-                    android:id="@+id/tvExpiringSoon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/warning_orange"
-                    tools:text="0" />
-
-            </LinearLayout>
-
-            <!-- Expired row -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/expiredLabel"
-                    android:textSize="16sp"
-                    android:textColor="@color/expired_red" />
-
-                <TextView
-                    android:id="@+id/tvExpired"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/expired_red"
-                    tools:text="0" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!-- Small spacer -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <!-- Add Button (rounded rectangle) -->
-        <Button
-            android:id="@+id/btnAddItem"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/addNewItem"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:backgroundTint="@color/fresh_green"
-            app:cornerRadius="16dp" />
-
-    </LinearLayout>
-
-    <!-- Right Panel: Item List -->
-    <ScrollView
+    <!-- Header Background -->
+    <View
+        android:id="@+id/headerBg"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:paddingStart="8dp"
+        android:layout_height="0dp"
+        android:background="@color/fresh_green"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guidelineCenter"
+        app:layout_constraintBottom_toBottomOf="@id/tvSubtitle"
+        android:layout_marginEnd="8dp" />
+
+    <!-- App Title -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:gravity="center"
+        android:text="@string/appTitle"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guidelineCenter"
+        android:layout_marginEnd="8dp" />
+
+    <!-- App Subtitle -->
+    <TextView
+        android:id="@+id/tvSubtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:layout_marginTop="2dp"
+        android:gravity="center"
+        android:text="@string/appSubtitleMain"
+        android:textSize="12sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guidelineCenter"
+        android:layout_marginEnd="8dp" />
+
+    <!-- ─── Summary Card Background ─── -->
+    <View
+        android:id="@+id/summaryBg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="8dp"
         android:background="@color/card_background"
-        android:elevation="2dp">
+        android:elevation="2dp"
+        app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guidelineCenter"
+        app:layout_constraintBottom_toTopOf="@id/summaryBottomBarrier" />
+
+    <!-- Fresh Label (left-aligned in card) -->
+    <TextView
+        android:id="@+id/tvFreshLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:elevation="2dp"
+        android:text="@string/freshLabel"
+        android:textSize="16sp"
+        android:textColor="@color/fresh_green"
+        app:layout_constraintTop_toTopOf="@id/summaryBg"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Fresh Count (right-aligned in card, baseline-aligned with label) -->
+    <TextView
+        android:id="@+id/tvFresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:elevation="2dp"
+        android:text="@string/defaultCount"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/fresh_green"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvFreshLabel"
+        app:layout_constraintEnd_toStartOf="@id/guidelineCenter"
+        tools:text="0" />
+
+    <!-- Expiring Soon Label -->
+    <TextView
+        android:id="@+id/tvExpiringSoonLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="6dp"
+        android:elevation="2dp"
+        android:text="@string/expiringSoonLabel"
+        android:textSize="16sp"
+        android:textColor="@color/warning_orange"
+        app:layout_constraintTop_toBottomOf="@id/tvFresh"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Expiring Soon Count -->
+    <TextView
+        android:id="@+id/tvExpiringSoon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:elevation="2dp"
+        android:text="@string/defaultCount"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/warning_orange"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvExpiringSoonLabel"
+        app:layout_constraintEnd_toStartOf="@id/guidelineCenter"
+        tools:text="0" />
+
+    <!-- Expired Label -->
+    <TextView
+        android:id="@+id/tvExpiredLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="6dp"
+        android:paddingBottom="12dp"
+        android:elevation="2dp"
+        android:text="@string/expiredLabel"
+        android:textSize="16sp"
+        android:textColor="@color/expired_red"
+        app:layout_constraintTop_toBottomOf="@id/tvExpiringSoon"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Expired Count -->
+    <TextView
+        android:id="@+id/tvExpired"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:paddingBottom="12dp"
+        android:elevation="2dp"
+        android:text="@string/defaultCount"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/expired_red"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvExpiredLabel"
+        app:layout_constraintEnd_toStartOf="@id/guidelineCenter"
+        tools:text="0" />
+
+    <!-- Barrier at the bottom of the last summary row -->
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/summaryBottomBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="tvExpiredLabel,tvExpired" />
+
+    <!-- Add Button (full-width, bottom of left panel) -->
+    <Button
+        android:id="@+id/btnAddItem"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/addNewItem"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:backgroundTint="@color/fresh_green"
+        app:cornerRadius="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guidelineCenter" />
+
+    <!-- ════════════════════════════════════════════
+         RIGHT PANEL: Item List
+         ════════════════════════════════════════════ -->
+
+    <!-- Item List — ScrollView + LinearLayout kept for programmatic addView() calls -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:background="@color/card_background"
+        android:elevation="2dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guidelineCenter"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:id="@+id/itemListContainer"
@@ -177,4 +218,4 @@
 
     </ScrollView>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
