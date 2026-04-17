@@ -13,3 +13,12 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Claude Code local config
+.claude/
+
+# Project brief (kept local)
+app/InstructionsForFinal.md
+
+# IDE-specific files not worth tracking
+.idea/markdown.xml

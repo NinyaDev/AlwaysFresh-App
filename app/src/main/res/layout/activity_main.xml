@@ -6,206 +6,29 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     android:background="@color/background_light"
     tools:context=".MainActivity">
 
-    <!-- ─── Header Background ─── -->
-    <View
-        android:id="@+id/headerBg"
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/fresh_green"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/tvSubtitle" />
-
-    <!-- App Title -->
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:text="@string/appTitle"
-        android:textColor="@color/white"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- App Subtitle -->
-    <TextView
-        android:id="@+id/tvSubtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingBottom="20dp"
-        android:layout_marginTop="2dp"
-        android:text="@string/appSubtitleMain"
-        android:textSize="14sp"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- ─── Summary Card Background ─── -->
-    <View
-        android:id="@+id/summaryBg"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="12dp"
+        android:layout_height="wrap_content"
         android:background="@color/card_background"
-        android:elevation="2dp"
-        app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/summaryBottomBarrier" />
-
-    <!-- Fresh Count (chain head) -->
-    <TextView
-        android:id="@+id/tvFresh"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:elevation="2dp"
-        android:gravity="center"
-        android:text="@string/defaultCount"
-        android:textColor="@color/fresh_green"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintTop_toTopOf="@id/summaryBg"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tvExpiringSoon"
-        tools:text="0" />
-
-    <!-- Expiring Soon Count -->
-    <TextView
-        android:id="@+id/tvExpiringSoon"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:elevation="2dp"
-        android:gravity="center"
-        android:text="@string/defaultCount"
-        android:textColor="@color/warning_orange"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintTop_toTopOf="@id/summaryBg"
-        app:layout_constraintStart_toEndOf="@id/tvFresh"
-        app:layout_constraintEnd_toStartOf="@id/tvExpired"
-        tools:text="0" />
-
-    <!-- Expired Count -->
-    <TextView
-        android:id="@+id/tvExpired"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:elevation="2dp"
-        android:gravity="center"
-        android:text="@string/defaultCount"
-        android:textColor="@color/expired_red"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintTop_toTopOf="@id/summaryBg"
-        app:layout_constraintStart_toEndOf="@id/tvExpiringSoon"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="0" />
-
-    <!-- Fresh Label -->
-    <TextView
-        android:id="@+id/tvFreshLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
-        android:elevation="2dp"
-        android:gravity="center"
-        android:text="@string/freshLabel"
-        android:textSize="15sp"
-        android:textColor="@color/fresh_green"
-        app:layout_constraintTop_toBottomOf="@id/tvFresh"
-        app:layout_constraintStart_toStartOf="@id/tvFresh"
-        app:layout_constraintEnd_toEndOf="@id/tvFresh" />
-
-    <!-- Expiring Soon Label -->
-    <TextView
-        android:id="@+id/tvExpiringSoonLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
-        android:elevation="2dp"
-        android:gravity="center"
-        android:text="@string/expiringSoonLabel"
-        android:textSize="15sp"
-        android:textColor="@color/warning_orange"
-        app:layout_constraintTop_toBottomOf="@id/tvExpiringSoon"
-        app:layout_constraintStart_toStartOf="@id/tvExpiringSoon"
-        app:layout_constraintEnd_toEndOf="@id/tvExpiringSoon" />
-
-    <!-- Expired Label -->
-    <TextView
-        android:id="@+id/tvExpiredLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
-        android:elevation="2dp"
-        android:gravity="center"
-        android:text="@string/expiredLabel"
-        android:textSize="15sp"
-        android:textColor="@color/expired_red"
-        app:layout_constraintTop_toBottomOf="@id/tvExpired"
-        app:layout_constraintStart_toStartOf="@id/tvExpired"
-        app:layout_constraintEnd_toEndOf="@id/tvExpired" />
-
-    <!-- Barrier at the bottom of all summary labels -->
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/summaryBottomBarrier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="tvFreshLabel,tvExpiringSoonLabel,tvExpiredLabel" />
-
-    <!-- Item List — ScrollView + LinearLayout kept for programmatic addView() calls -->
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toTopOf="@id/summaryBottomBarrier"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btnAddItem">
-
-        <LinearLayout
-            android:id="@+id/itemListContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-
-    </ScrollView>
-
-    <!-- Add Button (circular FAB-style) -->
-    <Button
-        android:id="@+id/btnAddItem"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:contentDescription="@string/addNewItem"
-        app:icon="@drawable/ic_add"
-        app:iconGravity="textStart"
-        app:iconPadding="0dp"
-        app:iconSize="24dp"
-        app:iconTint="@color/white"
-        app:backgroundTint="@color/fresh_green"
-        app:cornerRadius="32dp"
+        app:menu="@menu/bottom_nav_menu"
+        app:itemIconTint="@color/nav_item_color"
+        app:itemTextColor="@color/nav_item_color"
+        app:itemActiveIndicatorStyle="@style/Widget.AlwaysFresh.NavIndicator"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

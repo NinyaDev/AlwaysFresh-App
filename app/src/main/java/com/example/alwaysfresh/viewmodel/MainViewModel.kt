@@ -1,16 +1,20 @@
 package com.example.alwaysfresh.viewmodel
 
-import android.os.Bundle
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.example.alwaysfresh.R
-import com.example.alwaysfresh.model.FoodItem
+import com.example.alwaysfresh.data.AppDatabase
+import com.example.alwaysfresh.data.ItemEntity
 import com.example.alwaysfresh.model.FreshStatus
 import com.example.alwaysfresh.model.InventoryRepository
+import kotlinx.coroutines.launch
 
 data class DisplayItem(
+    val id: Long,
     val name: String,
     val date: String,
     val statusLabel: String,
@@ -18,27 +22,28 @@ data class DisplayItem(
 )
 
 /**
- * VIEWMODEL — The connector between Model and View.
+ * VIEWMODEL — Shared across MainActivity and all its hosted fragments.
  *
- * It:
- *   1. Hold a reference to the Model (repository)
- *   2. Call Model methods when the View asks
- *   3. Expose results as LiveData so the View can observe them
+ * Observes Room Flows via asLiveData() so the UI updates automatically
+ * whenever the database changes. Uses viewModelScope for write operations.
  */
-class MainViewModel : ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    // The Model
-    private val repository = InventoryRepository()
+    private val repository: InventoryRepository
 
-    //  Observable state
-    // Private mutable version — only the ViewModel can change it
-    private val _items = MutableLiveData<List<FoodItem>>(emptyList())
+    init {
+        val dao = AppDatabase.getInstance(application).itemDao()
+        repository = InventoryRepository(dao)
+    }
 
-    // Display-ready item list — the View observes this to build the ScrollView.
-    val displayItems: LiveData<List<DisplayItem>> = _items.map { list ->
+    // ── Active items (not deleted) ──────────────────────────────────────
+    private val allItems: LiveData<List<ItemEntity>> = repository.activeItems.asLiveData()
+
+    val displayItems: LiveData<List<DisplayItem>> = allItems.map { list ->
         list.map { item ->
-            val status = repository.classifyItem(item.expirationDate)
+            val status = InventoryRepository.classifyItem(item.expirationDate)
             DisplayItem(
+                id = item.id,
                 name = item.name,
                 date = item.expirationDate,
                 statusLabel = statusLabel(status),
@@ -47,46 +52,49 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    // Counter LiveData — recalculated automatically when _items changes.
-    val freshCount: LiveData<Int> = _items.map {
-        repository.countByStatus(FreshStatus.FRESH)
+    val freshCount: LiveData<Int> = allItems.map { list ->
+        list.count { InventoryRepository.classifyItem(it.expirationDate) == FreshStatus.FRESH }
     }
-    val expiringSoonCount: LiveData<Int> = _items.map {
-        repository.countByStatus(FreshStatus.EXPIRING_SOON)
+    val expiringSoonCount: LiveData<Int> = allItems.map { list ->
+        list.count { InventoryRepository.classifyItem(it.expirationDate) == FreshStatus.EXPIRING_SOON }
     }
-    val expiredCount: LiveData<Int> = _items.map {
-        repository.countByStatus(FreshStatus.EXPIRED)
+    val expiredCount: LiveData<Int> = allItems.map { list ->
+        list.count { InventoryRepository.classifyItem(it.expirationDate) == FreshStatus.EXPIRED }
     }
 
-    // ── Actions (called by the View)
-    // View passes raw strings — ViewModel tells the Model to create the item.
+    // ── Deleted items (for Shopping List) ───────────────────────────────
+    val deletedItems: LiveData<List<ItemEntity>> = repository.deletedItems.asLiveData()
+
+    val deletedItemCount: LiveData<Int> = deletedItems.map { it.size }
+
+    // ── Aggregate stats (for Waste Analytics) ───────────────────────────
+    val totalItemCount: LiveData<Int> = allItems.map { activeList ->
+        // We combine active + deleted counts. Since deletedItems is a separate
+        // LiveData, we calculate from what we have — the WasteAnalyticsFragment
+        // observes both independently for real-time accuracy.
+        activeList.size + (deletedItems.value?.size ?: 0)
+    }
+
+    // ── Actions ─────────────────────────────────────────────────────────
     fun addItem(name: String, date: String) {
-        repository.addItem(name, date)
-        _items.value = repository.getAllItems()
-    }
-
-    // Save inventory data into a Bundle (called by View in onSaveInstanceState). */
-    fun saveToBundle(outState: Bundle) {
-        val items = repository.getAllItems()
-        outState.putStringArrayList(KEY_NAMES, ArrayList(items.map { it.name }))
-        outState.putStringArrayList(KEY_DATES, ArrayList(items.map { it.expirationDate }))
-    }
-
-    // Restore inventory data from a Bundle (called by View in onCreate). */
-    fun restoreFromBundle(savedInstanceState: Bundle?) {
-        if (_items.value.isNullOrEmpty() && savedInstanceState != null) {
-            val names = savedInstanceState.getStringArrayList(KEY_NAMES)
-            val dates = savedInstanceState.getStringArrayList(KEY_DATES)
-            if (names != null && dates != null) {
-                val restored = names.zip(dates).map { (n, d) -> FoodItem(n, d) }
-                repository.restoreItems(restored)
-                _items.value = repository.getAllItems()
-            }
+        viewModelScope.launch {
+            repository.addItem(name, date)
         }
     }
 
-    // ── Private helpers (translate Model types → View-friendly values) ─
+    fun softDeleteItem(id: Long) {
+        viewModelScope.launch {
+            repository.softDeleteItem(id)
+        }
+    }
 
+    fun deleteAll() {
+        viewModelScope.launch {
+            repository.deleteAll()
+        }
+    }
+
+    // ── Private helpers ─────────────────────────────────────────────────
     private fun statusLabel(status: FreshStatus): String = when (status) {
         FreshStatus.FRESH -> "Fresh"
         FreshStatus.EXPIRING_SOON -> "Expiring Soon"
@@ -97,10 +105,5 @@ class MainViewModel : ViewModel() {
         FreshStatus.FRESH -> R.color.fresh_green
         FreshStatus.EXPIRING_SOON -> R.color.warning_orange
         FreshStatus.EXPIRED -> R.color.expired_red
-    }
-
-    companion object {
-        private const val KEY_NAMES = "key_item_names"
-        private const val KEY_DATES = "key_item_dates"
     }
 }

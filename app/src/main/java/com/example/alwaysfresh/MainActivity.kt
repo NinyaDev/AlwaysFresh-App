@@ -1,85 +1,100 @@
 package com.example.alwaysfresh
 
-import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.alwaysfresh.databinding.ActivityMainBinding
-import com.example.alwaysfresh.databinding.ItemFoodCardBinding
-import com.example.alwaysfresh.viewmodel.DisplayItem
-import com.example.alwaysfresh.viewmodel.MainViewModel
+import com.example.alwaysfresh.fragment.DashboardFragment
+import com.example.alwaysfresh.fragment.InventoryFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationBarView
+import com.google.android.material.navigationrail.NavigationRailView
 
 /**
- * VIEW — Displays the inventory summary and item list.
+ * VIEW — Host container for fragments.
+ * Portrait uses BottomNavigationView, landscape uses NavigationRailView.
+ * Settings tab launches SettingsActivity.
  */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val viewModel: MainViewModel by viewModels()
 
-    private val addItemLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data ?: return@registerForActivityResult
-            val name = data.getStringExtra(AddItemActivity.EXTRA_ITEM_NAME)
-                ?: return@registerForActivityResult
-            val date = data.getStringExtra(AddItemActivity.EXTRA_ITEM_DATE)
-                ?: return@registerForActivityResult
-
-            // Pass raw strings to ViewModel — View never creates Model objects
-            viewModel.addItem(name, date)
-        }
-    }
+    private val inventoryFragment = InventoryFragment()
+    private val dashboardFragment = DashboardFragment()
+    private var currentNavId = R.id.nav_inventory
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Apply saved dark mode preference before super.onCreate()
+        val prefs = getSharedPreferences(SettingsActivity.PREFS_NAME, MODE_PRIVATE)
+        val isDark = prefs.getBoolean(SettingsActivity.KEY_DARK_MODE, false)
+        AppCompatDelegate.setDefaultNightMode(
+            if (isDark) AppCompatDelegate.MODE_NIGHT_YES
+            else AppCompatDelegate.MODE_NIGHT_NO
+        )
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Let the ViewModel handle Bundle restoration
-        viewModel.restoreFromBundle(savedInstanceState)
-
-        // Observe ViewModel LiveData — the View only renders, never calculates
-        viewModel.freshCount.observe(this) { count ->
-            binding.tvFresh.text = count.toString()
-        }
-        viewModel.expiringSoonCount.observe(this) { count ->
-            binding.tvExpiringSoon.text = count.toString()
-        }
-        viewModel.expiredCount.observe(this) { count ->
-            binding.tvExpired.text = count.toString()
-        }
-        viewModel.displayItems.observe(this) { items ->
-            rebuildItemList(items)
+        // Restore the selected tab after config change, or default to Inventory
+        if (savedInstanceState != null) {
+            currentNavId = savedInstanceState.getInt(KEY_NAV_ID, R.id.nav_inventory)
+        } else {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragmentContainer, inventoryFragment, TAG_INVENTORY)
+                .add(R.id.fragmentContainer, dashboardFragment, TAG_DASHBOARD)
+                .hide(dashboardFragment)
+                .commit()
         }
 
-        binding.btnAddItem.setOnClickListener {
-            addItemLauncher.launch(AddItemActivity.newIntent(this))
+        // Find whichever nav exists — BottomNav (portrait) or NavRail (landscape)
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
+        val navRail = findViewById<NavigationRailView>(R.id.navRail)
+        val navView: NavigationBarView = bottomNav ?: navRail ?: return
+
+        navView.selectedItemId = currentNavId
+
+        navView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_inventory -> {
+                    currentNavId = R.id.nav_inventory
+                    showFragment(TAG_INVENTORY)
+                    true
+                }
+                R.id.nav_dashboard -> {
+                    currentNavId = R.id.nav_dashboard
+                    showFragment(TAG_DASHBOARD)
+                    true
+                }
+                R.id.nav_settings -> {
+                    startActivity(Intent(this, SettingsActivity::class.java))
+                    false
+                }
+                else -> false
+            }
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        viewModel.saveToBundle(outState)
+        outState.putInt(KEY_NAV_ID, currentNavId)
     }
 
-    // ── Pure UI rendering
-    private fun rebuildItemList(items: List<DisplayItem>) {
-        binding.itemListContainer.removeAllViews()
-        for (item in items) {
-            val cardBinding = ItemFoodCardBinding.inflate(layoutInflater, binding.itemListContainer, false)
-            val color = ContextCompat.getColor(this, item.statusColorResId)
+    private fun showFragment(tag: String) {
+        val fm = supportFragmentManager
+        val transaction = fm.beginTransaction()
 
-            cardBinding.tvItemName.text = item.name
-            cardBinding.tvItemDate.text = "Expires: ${item.date}"
-            cardBinding.tvItemStatus.text = item.statusLabel
-            cardBinding.tvItemStatus.setTextColor(color)
-            cardBinding.statusIndicator.setBackgroundColor(color)
+        fm.findFragmentByTag(TAG_INVENTORY)?.let { transaction.hide(it) }
+        fm.findFragmentByTag(TAG_DASHBOARD)?.let { transaction.hide(it) }
+        fm.findFragmentByTag(tag)?.let { transaction.show(it) }
 
-            binding.itemListContainer.addView(cardBinding.root)
-        }
+        transaction.commit()
+    }
+
+    companion object {
+        private const val TAG_INVENTORY = "inventory"
+        private const val TAG_DASHBOARD = "dashboard"
+        private const val KEY_NAV_ID = "key_nav_id"
     }
 }

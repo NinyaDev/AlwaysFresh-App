@@ -28,6 +28,8 @@ class AddItemActivity : AppCompatActivity() {
             binding.datePicker.updateDate(year, month, day)
         }
 
+        binding.btnBack.setOnClickListener { finish() }
+
         binding.btnSaveItem.setOnClickListener {
             val name = binding.etItemName.text.toString().trim()
             if (name.isEmpty()) {

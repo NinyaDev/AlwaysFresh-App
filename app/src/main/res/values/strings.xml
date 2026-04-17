@@ -13,4 +13,60 @@
     <string name="saveItem">Save Item</string>
     <string name="errorEmptyName">Please enter an item name</string>
     <string name="defaultCount">0</string>
+
+    <!-- Navigation -->
+    <string name="nav_inventory">Inventory</string>
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Inventory -->
+    <string name="no_items">No items in your inventory.\nTap + to add one!</string>
+
+    <!-- Item Detail -->
+    <string name="item_detail_title">Item Details</string>
+    <string name="edit_item">Edit</string>
+    <string name="delete_item">Delete</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm_delete_title">Delete Item</string>
+    <string name="confirm_delete_message">Are you sure you want to remove this item from your inventory?</string>
+    <string name="expires_prefix">Expires:</string>
+    <string name="status_prefix">Status:</string>
+    <string name="days_fresh">%d days remaining</string>
+    <string name="expired_days">Expired %d day(s) ago</string>
+    <string name="expires_today">Expires today</string>
+    <string name="expiring_in_days">Expiring in %d day(s)</string>
+
+    <!-- Dashboard -->
+    <string name="summary_title">Inventory Summary</string>
+    <string name="shopping_list_tab">Shopping List</string>
+    <string name="waste_analytics_tab">Waste Analytics</string>
+
+    <!-- Shopping List -->
+    <string name="no_deleted_items">No items in your shopping list yet.\nDeleted or expired items will appear here.</string>
+    <string name="deleted_on">Removed on: %s</string>
+
+    <!-- Waste Analytics -->
+    <string name="waste_summary_title">Waste Summary</string>
+    <string name="total_tracked">Total Items Tracked</string>
+    <string name="currently_fresh">Currently Fresh</string>
+    <string name="currently_expiring">Expiring Soon</string>
+    <string name="currently_expired">Currently Expired</string>
+    <string name="items_wasted">Items Removed</string>
+    <string name="price_coming_soon">Price tracking and savings analytics coming soon!</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="appearance_header">Appearance</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="dark_mode_summary">Toggle between light and dark theme</string>
+    <string name="danger_zone_header">Danger Zone</string>
+    <string name="wipe_database">Wipe All Data</string>
+    <string name="wipe_database_summary">Permanently delete all items from the database</string>
+    <string name="wipe_confirm_title">Wipe All Data?</string>
+    <string name="wipe_confirm_message">This will permanently delete all items. This action cannot be undone.</string>
+    <string name="wipe_success">All data has been deleted</string>
+
+    <!-- Common -->
+    <string name="back">Back</string>
 </resources>

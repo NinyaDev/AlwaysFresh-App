@@ -22,6 +22,8 @@
         </activity>
 
         <activity android:name=".AddItemActivity" />
+        <activity android:name=".ItemDetailActivity" />
+        <activity android:name=".SettingsActivity" />
 
     </application>
 

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light">
+
+    <!-- Header -->
+    <View
+        android:id="@+id/headerBg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/fresh_green"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/tvDashboardTitle" />
+
+    <TextView
+        android:id="@+id/tvDashboardTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="16dp"
+        android:text="@string/summary_title"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Summary Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/summaryCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="12dp"
+        app:layout_constraintTop_toBottomOf="@id/tvDashboardTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <!-- Fresh count -->
+            <TextView
+                android:id="@+id/tvFresh"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/defaultCount"
+                android:textColor="@color/fresh_green"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tvExpiringSoon"
+                tools:text="5" />
+
+            <TextView
+                android:id="@+id/tvFreshLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/freshLabel"
+                android:textColor="@color/fresh_green"
+                android:textSize="13sp"
+                app:layout_constraintTop_toBottomOf="@id/tvFresh"
+                app:layout_constraintStart_toStartOf="@id/tvFresh"
+                app:layout_constraintEnd_toEndOf="@id/tvFresh" />
+
+            <!-- Expiring Soon count -->
+            <TextView
+                android:id="@+id/tvExpiringSoon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/defaultCount"
+                android:textColor="@color/warning_orange"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvFresh"
+                app:layout_constraintEnd_toStartOf="@id/tvExpired"
+                tools:text="2" />
+
+            <TextView
+                android:id="@+id/tvExpiringSoonLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/expiringSoonLabel"
+                android:textColor="@color/warning_orange"
+                android:textSize="13sp"
+                app:layout_constraintTop_toBottomOf="@id/tvExpiringSoon"
+                app:layout_constraintStart_toStartOf="@id/tvExpiringSoon"
+                app:layout_constraintEnd_toEndOf="@id/tvExpiringSoon" />
+
+            <!-- Expired count -->
+            <TextView
+                android:id="@+id/tvExpired"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/defaultCount"
+                android:textColor="@color/expired_red"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvExpiringSoon"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="1" />
+
+            <TextView
+                android:id="@+id/tvExpiredLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/expiredLabel"
+                android:textColor="@color/expired_red"
+                android:textSize="13sp"
+                app:layout_constraintTop_toBottomOf="@id/tvExpired"
+                app:layout_constraintStart_toStartOf="@id/tvExpired"
+                app:layout_constraintEnd_toEndOf="@id/tvExpired" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- TabLayout + ViewPager2 -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginHorizontal="16dp"
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        app:tabIndicatorColor="@color/fresh_green"
+        app:tabSelectedTextColor="@color/fresh_green"
+        app:layout_constraintTop_toBottomOf="@id/summaryCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
