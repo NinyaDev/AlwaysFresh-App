@@ -8,11 +8,13 @@
 
 ## Demo
 
+<div align="center">
+
 https://github.com/user-attachments/assets/02071409-9963-45cb-94e1-47e085d1f766
 
-<div align="center">
 <img src="https://github.com/user-attachments/assets/c8594dc2-ba36-473d-8187-5c691dc921dc" alt="AlwaysFresh Screenshot 1" width="300">
 <img src="https://github.com/user-attachments/assets/8a5390ce-f74b-4bc7-b4b4-ed27edcee2ef" alt="AlwaysFresh Screenshot 2" width="300">
+
 </div>
 
 ---
