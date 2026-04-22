@@ -5,12 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="@color/background_light"
+    android:background="@color/fresh_green"
     android:fitsSystemWindows="true"
     tools:context=".AddItemActivity">
 
-    <!-- ─── Header Background ─── -->
+    <!-- Header Background -->
     <View
         android:id="@+id/headerBg"
         android:layout_width="0dp"
@@ -61,7 +60,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Vertical Guideline at 45% — left panel is narrower (form), right panel wider (DatePicker) -->
+    <!-- Content background (light, covers area below header) -->
+    <View
+        android:id="@+id/contentBg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/background_light"
+        app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Vertical Guideline at 45% -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineCenter"
         android:layout_width="wrap_content"
@@ -69,15 +79,13 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.45" />
 
-    <!-- ════════════════════════════════════════════
-         LEFT PANEL: Form fields + Save button
-         ════════════════════════════════════════════ -->
+    <!-- LEFT PANEL -->
 
-    <!-- Form Heading -->
     <TextView
         android:id="@+id/tvFormHeading"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:text="@string/addNewFoodItem"
@@ -88,11 +96,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guidelineCenter" />
 
-    <!-- Item Name Input -->
     <EditText
         android:id="@+id/etItemName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:padding="12dp"
@@ -103,12 +111,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guidelineCenter" />
 
-    <!-- Save Button (anchored to bottom of left panel) -->
     <Button
         android:id="@+id/btnSaveItem"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/saveItem"
         android:textColor="@color/white"
         android:textSize="16sp"
@@ -117,17 +126,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guidelineCenter" />
 
-    <!-- ════════════════════════════════════════════
-         RIGHT PANEL: Date Picker
-         ════════════════════════════════════════════ -->
+    <!-- RIGHT PANEL -->
 
-    <!-- Expiration Date Label -->
     <TextView
         android:id="@+id/tvDateLabel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/expirationDateLabel"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -136,13 +143,14 @@
         app:layout_constraintStart_toEndOf="@id/guidelineCenter"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Date Picker (fills remaining right-panel space) -->
     <DatePicker
         android:id="@+id/datePicker"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:datePickerMode="spinner"
         android:calendarViewShown="false"
         app:layout_constraintTop_toBottomOf="@id/tvDateLabel"
