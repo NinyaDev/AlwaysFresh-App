@@ -9,8 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.alwaysfresh.R
 import com.example.alwaysfresh.data.AppDatabase
 import com.example.alwaysfresh.data.ItemEntity
+import com.example.alwaysfresh.data.InventoryRepository
 import com.example.alwaysfresh.model.FreshStatus
-import com.example.alwaysfresh.model.InventoryRepository
 import kotlinx.coroutines.launch
 
 data class DisplayItem(

@@ -1,7 +1,6 @@
-package com.example.alwaysfresh.model
+package com.example.alwaysfresh.data
 
-import com.example.alwaysfresh.data.ItemDao
-import com.example.alwaysfresh.data.ItemEntity
+import com.example.alwaysfresh.model.FreshStatus
 import kotlinx.coroutines.flow.Flow
 import java.util.Calendar
 

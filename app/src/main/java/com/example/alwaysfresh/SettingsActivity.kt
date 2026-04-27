@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.lifecycleScope
 import com.example.alwaysfresh.data.AppDatabase
 import com.example.alwaysfresh.databinding.ActivitySettingsBinding
-import com.example.alwaysfresh.model.InventoryRepository
+import com.example.alwaysfresh.data.InventoryRepository
 import kotlinx.coroutines.launch
 
 /**
