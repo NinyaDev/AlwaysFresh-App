@@ -10,6 +10,7 @@ import com.example.alwaysfresh.R
 import com.example.alwaysfresh.data.InventoryRepository
 import com.example.alwaysfresh.data.ItemEntity
 import com.example.alwaysfresh.model.FreshStatus
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 data class DisplayItem(
@@ -63,12 +64,13 @@ class MainViewModel(
     val deletedItemCount: LiveData<Int> = deletedItems.map { it.size }
 
     // ── Aggregate stats (for Waste Analytics) ───────────────────────────
-    val totalItemCount: LiveData<Int> = allItems.map { activeList ->
-        // We combine active + deleted counts. Since deletedItems is a separate
-        // LiveData, we calculate from what we have — the WasteAnalyticsFragment
-        // observes both independently for real-time accuracy.
-        activeList.size + (deletedItems.value?.size ?: 0)
-    }
+    // Combining the two source flows keeps the total in sync regardless of
+    // which side changes — the prior `allItems.map { ... + deletedItems.value }`
+    // missed updates when only the deleted list moved.
+    val totalItemCount: LiveData<Int> = combine(
+        repository.activeItems,
+        repository.deletedItems
+    ) { active, deleted -> active.size + deleted.size }.asLiveData()
 
     // ── Actions ─────────────────────────────────────────────────────────
     fun addItem(name: String, date: String) {
