@@ -9,12 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.alwaysfresh.data.AppDatabase
+import com.example.alwaysfresh.data.InventoryRepository
 import com.example.alwaysfresh.data.ItemEntity
 import com.example.alwaysfresh.databinding.ActivityItemDetailBinding
-import com.example.alwaysfresh.data.InventoryRepository
 import com.example.alwaysfresh.model.FreshStatus
 import kotlinx.coroutines.launch
-import java.util.Calendar
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 /**
  * VIEW — Full-screen detail view for a single inventory item.
@@ -92,12 +93,12 @@ class ItemDetailActivity : AppCompatActivity() {
 
         if (editMode) {
             binding.etEditName.setText(item.name)
-            // Parse date and set DatePicker
-            val parts = item.expirationDate.split("-")
+            val parsed = runCatching { LocalDate.parse(item.expirationDate) }.getOrNull()
+                ?: LocalDate.now()
             binding.editDatePicker.updateDate(
-                parts[0].toInt(),
-                parts[1].toInt() - 1,  // DatePicker is 0-indexed
-                parts[2].toInt()
+                parsed.year,
+                parsed.monthValue - 1,  // DatePicker is 0-indexed
+                parsed.dayOfMonth
             )
         }
     }
@@ -109,10 +110,11 @@ class ItemDetailActivity : AppCompatActivity() {
             return
         }
 
-        val year = binding.editDatePicker.year
-        val month = binding.editDatePicker.month + 1
-        val day = binding.editDatePicker.dayOfMonth
-        val date = "%04d-%02d-%02d".format(year, month, day)
+        val date = LocalDate.of(
+            binding.editDatePicker.year,
+            binding.editDatePicker.month + 1,
+            binding.editDatePicker.dayOfMonth
+        ).toString()
 
         val item = currentItem ?: return
         val updated = item.copy(name = name, expirationDate = date)
@@ -140,18 +142,9 @@ class ItemDetailActivity : AppCompatActivity() {
     }
 
     private fun daysInfoText(date: String): String {
-        val parts = date.split("-")
-        val expiration = Calendar.getInstance().apply {
-            set(parts[0].toInt(), parts[1].toInt() - 1, parts[2].toInt(), 0, 0, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-        val today = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-        val diffDays = ((expiration.timeInMillis - today.timeInMillis) / (1000 * 60 * 60 * 24)).toInt()
+        val expiration = runCatching { LocalDate.parse(date) }.getOrNull()
+            ?: return getString(R.string.expired_days, 0)
+        val diffDays = ChronoUnit.DAYS.between(LocalDate.now(), expiration).toInt()
 
         return when {
             diffDays < 0 -> getString(R.string.expired_days, -diffDays)

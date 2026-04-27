@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.alwaysfresh.databinding.ActivityAddItemBinding
+import java.time.LocalDate
 
 /**
  * VIEW — Input form for adding a new food item.
@@ -37,10 +38,11 @@ class AddItemActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val year = binding.datePicker.year
-            val month = binding.datePicker.month + 1   // DatePicker month is 0-indexed
-            val day = binding.datePicker.dayOfMonth
-            val date = String.format("%04d-%02d-%02d", year, month, day)
+            val date = LocalDate.of(
+                binding.datePicker.year,
+                binding.datePicker.month + 1,   // DatePicker month is 0-indexed
+                binding.datePicker.dayOfMonth
+            ).toString()
 
             val resultIntent = Intent().apply {
                 putExtra(EXTRA_ITEM_NAME, name)
