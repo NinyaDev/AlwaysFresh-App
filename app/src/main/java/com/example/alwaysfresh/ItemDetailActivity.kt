@@ -29,6 +29,11 @@ class ItemDetailActivity : AppCompatActivity() {
     private var currentItem: ItemEntity? = null
     private var isEditMode = false
 
+    // In-flight edit form state captured by onSaveInstanceState. We hold it
+    // until loadItem() finishes before applying, since the form widgets are
+    // populated as part of the transition into edit mode.
+    private var savedEditState: EditState? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityItemDetailBinding.inflate(layoutInflater)
@@ -40,14 +45,47 @@ class ItemDetailActivity : AppCompatActivity() {
         itemId = intent.getLongExtra(EXTRA_ITEM_ID, -1)
         if (itemId == -1L) { finish(); return }
 
+        savedEditState = savedInstanceState?.takeIf { it.getBoolean(KEY_EDIT_MODE, false) }
+            ?.let { state ->
+                EditState(
+                    name = state.getString(KEY_EDIT_NAME) ?: "",
+                    year = state.getInt(KEY_EDIT_YEAR, -1),
+                    month = state.getInt(KEY_EDIT_MONTH, -1),
+                    day = state.getInt(KEY_EDIT_DAY, -1)
+                )
+            }
+
         loadItem()
         setupButtons()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(KEY_EDIT_MODE, isEditMode)
+        if (isEditMode) {
+            outState.putString(KEY_EDIT_NAME, binding.etEditName.text.toString())
+            outState.putInt(KEY_EDIT_YEAR, binding.editDatePicker.year)
+            outState.putInt(KEY_EDIT_MONTH, binding.editDatePicker.month)
+            outState.putInt(KEY_EDIT_DAY, binding.editDatePicker.dayOfMonth)
+        }
     }
 
     private fun loadItem() {
         lifecycleScope.launch {
             currentItem = repository.getItemById(itemId)
-            currentItem?.let { displayItem(it) } ?: finish()
+            val item = currentItem ?: run { finish(); return@launch }
+            displayItem(item)
+
+            // If the user was editing pre-rotation, drop back into edit mode
+            // and replay the in-flight form values.
+            savedEditState?.let { state ->
+                toggleEditMode(true)
+                binding.etEditName.setText(state.name)
+                if (state.year != -1) {
+                    binding.editDatePicker.updateDate(state.year, state.month, state.day)
+                }
+                savedEditState = null
+            }
         }
     }
 
@@ -166,8 +204,21 @@ class ItemDetailActivity : AppCompatActivity() {
         FreshStatus.EXPIRED -> R.color.expired_red
     }
 
+    private data class EditState(
+        val name: String,
+        val year: Int,
+        val month: Int,
+        val day: Int
+    )
+
     companion object {
         const val EXTRA_ITEM_ID = "extra_item_id"
+
+        private const val KEY_EDIT_MODE = "key_edit_mode"
+        private const val KEY_EDIT_NAME = "key_edit_name"
+        private const val KEY_EDIT_YEAR = "key_edit_year"
+        private const val KEY_EDIT_MONTH = "key_edit_month"
+        private const val KEY_EDIT_DAY = "key_edit_day"
 
         fun newIntent(context: Context, itemId: Long): Intent {
             return Intent(context, ItemDetailActivity::class.java).apply {

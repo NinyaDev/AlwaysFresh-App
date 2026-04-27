@@ -20,8 +20,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val inventoryFragment = InventoryFragment()
-    private val dashboardFragment = DashboardFragment()
     private var currentNavId = R.id.nav_inventory
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,14 +35,17 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Restore the selected tab after config change, or default to Inventory
+        // Restore the selected tab after config change, or default to Inventory.
+        // Fragments themselves are restored automatically by the FragmentManager;
+        // we only do the initial add on first launch.
         if (savedInstanceState != null) {
             currentNavId = savedInstanceState.getInt(KEY_NAV_ID, R.id.nav_inventory)
         } else {
+            val dashboard = DashboardFragment()
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragmentContainer, inventoryFragment, TAG_INVENTORY)
-                .add(R.id.fragmentContainer, dashboardFragment, TAG_DASHBOARD)
-                .hide(dashboardFragment)
+                .add(R.id.fragmentContainer, InventoryFragment(), TAG_INVENTORY)
+                .add(R.id.fragmentContainer, dashboard, TAG_DASHBOARD)
+                .hide(dashboard)
                 .commit()
         }
 
