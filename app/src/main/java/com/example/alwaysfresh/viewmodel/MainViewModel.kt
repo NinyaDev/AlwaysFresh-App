@@ -7,9 +7,8 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.example.alwaysfresh.R
-import com.example.alwaysfresh.data.AppDatabase
-import com.example.alwaysfresh.data.ItemEntity
 import com.example.alwaysfresh.data.InventoryRepository
+import com.example.alwaysfresh.data.ItemEntity
 import com.example.alwaysfresh.model.FreshStatus
 import kotlinx.coroutines.launch
 
@@ -27,14 +26,10 @@ data class DisplayItem(
  * Observes Room Flows via asLiveData() so the UI updates automatically
  * whenever the database changes. Uses viewModelScope for write operations.
  */
-class MainViewModel(application: Application) : AndroidViewModel(application) {
-
+class MainViewModel(
+    application: Application,
     private val repository: InventoryRepository
-
-    init {
-        val dao = AppDatabase.getInstance(application).itemDao()
-        repository = InventoryRepository(dao)
-    }
+) : AndroidViewModel(application) {
 
     // ── Active items (not deleted) ──────────────────────────────────────
     private val allItems: LiveData<List<ItemEntity>> = repository.activeItems.asLiveData()

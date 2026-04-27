@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alwaysfresh.adapter.ShoppingListAdapter
 import com.example.alwaysfresh.databinding.FragmentShoppingListBinding
 import com.example.alwaysfresh.viewmodel.MainViewModel
+import com.example.alwaysfresh.viewmodel.MainViewModelFactory
 
 /**
  * Nested fragment inside DashboardFragment's ViewPager2.
@@ -19,7 +20,9 @@ class ShoppingListFragment : Fragment() {
 
     private var _binding: FragmentShoppingListBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels {
+        MainViewModelFactory(requireActivity().application)
+    }
 
     private lateinit var adapter: ShoppingListAdapter
 

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.alwaysfresh.databinding.FragmentWasteAnalyticsBinding
 import com.example.alwaysfresh.viewmodel.MainViewModel
+import com.example.alwaysfresh.viewmodel.MainViewModelFactory
 
 /**
  * Nested fragment inside DashboardFragment's ViewPager2.
@@ -18,7 +19,9 @@ class WasteAnalyticsFragment : Fragment() {
 
     private var _binding: FragmentWasteAnalyticsBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels {
+        MainViewModelFactory(requireActivity().application)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

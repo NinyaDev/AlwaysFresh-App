@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import com.example.alwaysfresh.adapter.DashboardPagerAdapter
 import com.example.alwaysfresh.databinding.FragmentDashboardBinding
 import com.example.alwaysfresh.viewmodel.MainViewModel
+import com.example.alwaysfresh.viewmodel.MainViewModelFactory
 import com.google.android.material.tabs.TabLayoutMediator
 
 /**
@@ -19,7 +20,9 @@ class DashboardFragment : Fragment() {
 
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels {
+        MainViewModelFactory(requireActivity().application)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

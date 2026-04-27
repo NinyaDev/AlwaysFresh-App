@@ -15,6 +15,7 @@ import com.example.alwaysfresh.ItemDetailActivity
 import com.example.alwaysfresh.adapter.ItemAdapter
 import com.example.alwaysfresh.databinding.FragmentInventoryBinding
 import com.example.alwaysfresh.viewmodel.MainViewModel
+import com.example.alwaysfresh.viewmodel.MainViewModelFactory
 
 /**
  * Default fragment — displays the inventory summary and item list in a RecyclerView.
@@ -24,7 +25,9 @@ class InventoryFragment : Fragment() {
 
     private var _binding: FragmentInventoryBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels {
+        MainViewModelFactory(requireActivity().application)
+    }
 
     private val addItemLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
