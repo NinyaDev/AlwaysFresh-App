@@ -44,6 +44,9 @@ class SettingsActivity : AppCompatActivity() {
                 if (isChecked) AppCompatDelegate.MODE_NIGHT_YES
                 else AppCompatDelegate.MODE_NIGHT_NO
             )
+            // Re-theme this activity immediately so the toggle's own surface
+            // doesn't stay in the previous mode until the user backs out.
+            delegate.applyDayNight()
         }
     }
 

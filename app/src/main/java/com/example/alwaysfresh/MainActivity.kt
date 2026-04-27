@@ -3,7 +3,6 @@ package com.example.alwaysfresh
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import com.example.alwaysfresh.databinding.ActivityMainBinding
 import com.example.alwaysfresh.fragment.DashboardFragment
 import com.example.alwaysfresh.fragment.InventoryFragment
@@ -23,14 +22,6 @@ class MainActivity : AppCompatActivity() {
     private var currentNavId = R.id.nav_inventory
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Apply saved dark mode preference before super.onCreate()
-        val prefs = getSharedPreferences(SettingsActivity.PREFS_NAME, MODE_PRIVATE)
-        val isDark = prefs.getBoolean(SettingsActivity.KEY_DARK_MODE, false)
-        AppCompatDelegate.setDefaultNightMode(
-            if (isDark) AppCompatDelegate.MODE_NIGHT_YES
-            else AppCompatDelegate.MODE_NIGHT_NO
-        )
-
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
